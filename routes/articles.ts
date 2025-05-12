@@ -1,3 +1,4 @@
+import { RouterContext } from '@koa/router';
 import * as model from '../models/articles';
 
 const getAll = async (ctx: RouterContext, next: any) => {
