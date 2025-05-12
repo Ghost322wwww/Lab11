@@ -2,14 +2,13 @@ import * as db from '../helpers/database';
 
 export const getById = async (id: any) => {
   let query = "SELECT * FROM articles WHERE id = ?";
-  let values = [id];
-  return await db.run_query(query, values);
-}
+  return await db.run_query(query, [id]);
+};
 
 export const getAll = async () => {
   let query = "SELECT * FROM articles;";
   return await db.run_query(query, null);
-}
+};
 
 export const add = async (article: any) => {
   let keys = Object.keys(article);
@@ -17,10 +16,11 @@ export const add = async (article: any) => {
   let key = keys.join(',');
   let param = keys.map(() => '?').join(',');
   let query = `INSERT INTO articles (${key}) VALUES (${param})`;
+
   try {
     await db.run_insert(query, values);
     return { status: 201 };
   } catch (err: any) {
     return err;
   }
-}
+};

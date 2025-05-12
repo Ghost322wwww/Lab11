@@ -1,13 +1,16 @@
+import Router from '@koa/router';
 import { RouterContext } from '@koa/router';
 import * as model from '../models/articles';
 
-export const getAll = async (ctx: RouterContext, next: any) => {
+const router = new Router();
+
+const getAll = async (ctx: RouterContext, next: any) => {
   let articles = await model.getAll();
   ctx.body = articles.length ? articles : {};
   await next();
-}
+};
 
-export const getById = async (ctx: RouterContext, next: any) => {
+const getById = async (ctx: RouterContext, next: any) => {
   let id = ctx.params.id;
   let article = await model.getById(id);
   if (article.length) {
@@ -16,12 +19,12 @@ export const getById = async (ctx: RouterContext, next: any) => {
     ctx.status = 404;
   }
   await next();
-}
+};
 
-export const createArticle = async (ctx: RouterContext, next: any) => {
-  const body = (ctx.request as any).body; 
+const createArticle = async (ctx: RouterContext, next: any) => {
+  const body = ctx.request.body;
   let result = await model.add(body);
-  if (result.status === 201) {
+  if (result.status == 201) {
     ctx.status = 201;
     ctx.body = body;
   } else {
@@ -29,4 +32,11 @@ export const createArticle = async (ctx: RouterContext, next: any) => {
     ctx.body = { err: "insert data failed" };
   }
   await next();
-}
+};
+
+// Define the routes
+router.get('/articles', getAll);
+router.get('/articles/:id', getById);
+router.post('/articles', createArticle);
+
+export default router;

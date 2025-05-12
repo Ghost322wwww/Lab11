@@ -1,5 +1,5 @@
-import { Sequelize, QueryTypes } from 'sequelize';  
-import { config } from '../config'; 
+import { Sequelize, QueryTypes } from 'sequelize';
+import { config } from '../config';
 
 export const run_query = async (query: string, values: any) => {
   try {
@@ -15,7 +15,7 @@ export const run_query = async (query: string, values: any) => {
     console.error(err, query, values);
     throw 'Database query error';
   }
-}
+};
 
 export const run_insert = async (sql: string, values: any) => {
   try {
@@ -31,4 +31,4 @@ export const run_insert = async (sql: string, values: any) => {
     console.error(err, sql, values);
     throw 'Database insert error';
   }
-}
+};
