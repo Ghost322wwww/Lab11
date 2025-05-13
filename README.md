@@ -69,3 +69,6 @@ Development Notes
 
 - Errors are caught using try/catch and logged via console.error.
 
+Created for Coursework Lab6
+By: JackyKwok
+Date: 2025/05/13
