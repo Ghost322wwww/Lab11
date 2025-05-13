@@ -1,6 +1,10 @@
 import Router from '@koa/router';
 import { RouterContext } from '@koa/router';
 import * as model from '../models/articles';
+import { basicAuth } from '../controllers/auth';
+import { validateArticle } from '../controllers/validation';
+import bodyParser from 'koa-bodyparser'; 
+
 
 const router = new Router();
 
@@ -34,9 +38,36 @@ const createArticle = async (ctx: RouterContext, next: any) => {
   await next();
 };
 
+const updateArticle = async (ctx: RouterContext, next: any) => {
+  const body = ctx.request.body;
+  const id = parseInt(ctx.params.id);
+  const result = await model.update(id, body);
+  if (result.status == 200) {
+    ctx.body = { message: "Article updated successfully" };
+  } else {
+    ctx.status = 500;
+    ctx.body = { err: "update failed" };
+  }
+  await next();
+};
+
+const deleteArticle = async (ctx: RouterContext, next: any) => {
+  const id = parseInt(ctx.params.id);
+  const result = await model.del(id);
+  if (result.status == 200) {
+    ctx.body = { message: "Article deleted successfully" };
+  } else {
+    ctx.status = 500;
+    ctx.body = { err: "delete failed" };
+  }
+  await next();
+};
+
 // Define the routes
 router.get('/articles', getAll);
 router.get('/articles/:id', getById);
-router.post('/articles', createArticle);
+router.post('/articles', basicAuth, bodyParser(), validateArticle, createArticle);
+router.put('/articles/:id', basicAuth, bodyParser(), validateArticle, updateArticle);
+router.delete('/articles/:id', basicAuth, deleteArticle);
 
 export default router;
