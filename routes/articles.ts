@@ -27,6 +27,7 @@ const getById = async (ctx: RouterContext, next: any) => {
 
 const createArticle = async (ctx: RouterContext, next: any) => {
   const body = ctx.request.body;
+  console.log("Received article information: ", body);
   let result = await model.add(body);
   if (result.status == 201) {
     ctx.status = 201;

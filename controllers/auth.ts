@@ -11,6 +11,7 @@ passport.use(new BasicStrategy(async (username, password, done) => {
   let result: any[] = [];
   try {
     result = await users.findByUsername(username);
+    console.log("Query results：", result);
   } catch (error) {
     console.error(`Error during authentication for user ${username}: ${error}`);
     return done(null, false);
