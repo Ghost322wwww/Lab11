@@ -6,7 +6,8 @@ import { validateArticle } from '../controllers/validation';
 import bodyParser from 'koa-bodyparser'; 
 
 
-const router = new Router();
+const router = new Router({ prefix: '/api/v1' });
+
 
 const getAll = async (ctx: RouterContext, next: any) => {
   let articles = await model.getAll();
@@ -31,7 +32,7 @@ const createArticle = async (ctx: RouterContext, next: any) => {
   let result = await model.add(body);
   if (result.status == 201) {
     ctx.status = 201;
-    ctx.body = body;
+    ctx.body = { id: result.id, ...(ctx.request.body as Record<string, any>) };
   } else {
     ctx.status = 500;
     ctx.body = { err: "insert data failed" };
